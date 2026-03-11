@@ -7,11 +7,14 @@ pipeline {
         jdk 'JDK 25'
     }
 
+    environment {
+        TOMCAT_HOME = "/Users/soumyadip/Downloads/apache-tomcat-10.1.52"
+    }
+
     stages {
 
         stage('Checkout') {
             steps {
-                
                 git branch: 'main', url: 'https://github.com/soumadipchangder/jenkins-my-webapp'
             }
         }
@@ -44,13 +47,13 @@ pipeline {
 
         stage('Deploy to Tomcat') {
             steps {
-                sh 'cp target/*.war /usr/local/tomcat/webapps/'
+                sh 'cp target/*.war $TOMCAT_HOME/webapps/'
             }
         }
 
         stage('Start Tomcat Server') {
             steps {
-                sh '/usr/local/tomcat/bin/startup.sh'
+                sh '$TOMCAT_HOME/bin/startup.sh'
             }
         }
 
