@@ -12,45 +12,45 @@ pipeline {
         stage('Checkout') {
             steps {
                 
-                git branch: 'master', url: 'https://github.com/ankithtrainer/jenkins-my-webapp'
+                git branch: 'main', url: 'https://github.com/soumadipchangder/jenkins-my-webapp'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'mvn clean compile'
+                sh 'mvn clean compile'
             }
         }
 
         stage('Run JUnit Tests') {
             steps {
-                bat 'mvn test'
+                sh 'mvn test'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarServer') {
-                    bat 'mvn clean verify sonar:sonar'
+                    sh 'mvn clean verify sonar:sonar'
                 }
             }
         }
 
         stage('Build with Maven') {
             steps {
-                bat 'mvn clean package'
+                sh 'mvn clean package'
             }
         }
 
         stage('Deploy to Tomcat') {
             steps {
-                bat 'copy target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\"'
+                sh 'cp target/*.war /usr/local/tomcat/webapps/'
             }
         }
 
         stage('Start Tomcat Server') {
             steps {
-                bat '"C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\startup.bat"'
+                sh '/usr/local/tomcat/bin/startup.sh'
             }
         }
 
